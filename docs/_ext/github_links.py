@@ -41,10 +41,10 @@ class CodeLocator(ast.NodeVisitor):
                 file = module_name_to_file_path(node.module)
                 file_contents = file.read_text(encoding="utf-8")
                 locator = CodeLocator.from_code(file_contents)
-                self.import_locations |= locator.import_locations
-                self.import_locations |= {
-                    n: node.module for n in locator.node_line_numbers if "." not in n
-                }
+                self.import_locations.update(locator.import_locations)
+                self.import_locations.update(
+                    {n: node.module for n in locator.node_line_numbers if "." not in n}
+                )
             else:
                 self.import_locations[alias.name] = ("." * node.level) + (
                     node.module or ""
@@ -143,7 +143,7 @@ def github_linkcode_resolve(domain, info, *, version, next_version):
 
     branch = get_branch(version=version, next_version=next_version)
     relative_path = path.relative_to(pathlib.Path(__file__).parents[2])
-    # Use "/" explicitely to join the path parts since str(file), on Windows,
+    # Use "/" explicitly to join the path parts since str(file), on Windows,
     # uses the Windows path separator which is incorrect for URLs.
     url_path = "/".join(relative_path.parts)
     return f"https://github.com/django/django/blob/{branch}/{url_path}#L{lineno}"
