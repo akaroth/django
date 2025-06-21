@@ -73,6 +73,9 @@ Minor features
   function rotates a geometry by a specified angle around the origin or a
   specified point.
 
+* The new :attr:`.BaseGeometryWidget.base_layer` attribute allows specifying a
+  JavaScript map base layer, enabling customization of map tile providers.
+
 :mod:`django.contrib.messages`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -81,7 +84,9 @@ Minor features
 :mod:`django.contrib.postgres`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-* ...
+* Model fields, indexes, and constraints from :mod:`django.contrib.postgres`
+  now include system checks to verify that ``django.contrib.postgres`` is an
+  installed app.
 
 :mod:`django.contrib.redirects`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -212,6 +217,10 @@ Models
 * :class:`~django.db.models.JSONField` now supports
   :ref:`negative array indexing <key-index-and-path-transforms>` on SQLite.
 
+* The new :class:`~django.db.models.AnyValue` aggregate returns an arbitrary
+  value from the non-null input values. This is supported on SQLite, MySQL,
+  Oracle, and PostgreSQL 16+.
+
 Pagination
 ~~~~~~~~~~
 
@@ -328,6 +337,11 @@ Miscellaneous
   refactored to use Python's :py:class:`email.message.Message` for parsing.
   Input headers exceeding 10000 characters will now raise :exc:`ValueError`.
 
+* Widgets from :mod:`django.contrib.gis.forms.widgets` now render without
+  inline JavaScript in templates. If you have customized any geometry widgets
+  or their templates, you may need to :ref:`update them
+  <geometry-widgets-customization>` to match the new layout.
+
 .. _deprecated-features-6.0:
 
 Features deprecated in 6.0
@@ -360,6 +374,8 @@ Miscellaneous
 * Support for the ``orphans`` argument being larger than or equal to the
   ``per_page`` argument of :class:`django.core.paginator.Paginator` and
   :class:`django.core.paginator.AsyncPaginator` is deprecated.
+
+* Using a percent sign in a column alias or annotation is deprecated.
 
 Features removed in 6.0
 =======================
@@ -394,7 +410,7 @@ to remove usage of these features.
 * The ``get_joining_columns()`` method of ``ForeignObject`` and
   ``ForeignObjectRel`` is removed.
 
-* The ``ForeignObject.get_reverse_joining_columns()`` method is be removed.
+* The ``ForeignObject.get_reverse_joining_columns()`` method is removed.
 
 * Support for ``cx_Oracle`` is removed.
 
